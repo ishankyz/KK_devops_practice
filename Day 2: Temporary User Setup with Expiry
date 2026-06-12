@@ -1,0 +1,11 @@
+#SSH into the server
+ssh banner@stapp03
+
+
+#Create the user with expiry date 
+sudo useradd -e 2026-12-07 <user>
+
+#Verify the user and expiry
+chage -l yousuf
+(or)
+grep yousuf /etc/shadow
