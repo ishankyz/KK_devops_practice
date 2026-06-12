@@ -1,4 +1,4 @@
-Get the list of users and then login to specific app server
+##Get the list of users and then login to specific app server
 
 #ssh to server to create user
 ssh banner@stapp03
@@ -12,4 +12,3 @@ sudo useradd -m -s /usr/sbin/nologin ravi
 
 #Confirm the user was created
 grep ravi /etc/passwd
-
