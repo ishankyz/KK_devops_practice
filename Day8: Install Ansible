@@ -1,0 +1,38 @@
+On the **jump host**, install **Ansible 4.8.0** with **pip3** and make it available system-wide.
+
+### 1. Verify pip3 exists
+pip3 --version
+
+
+### 2. Install Ansible 4.8.0 globally
+Use sudo so it installs into the system Python location:
+
+sudo pip3 install ansible==4.8.0 (whatever version you need)
+
+### 3. Verify installation
+ansible --version
+
+
+and the package version:
+pip3 show ansible
+
+### 4. If `ansible` is not in the global PATH
+
+Find where pip installed it:
+sudo find / -type f -name ansible 2>/dev/null
+
+
+If it's under `/usr/local/bin/ansible`, ensure `/usr/local/bin` is in the global PATH:
+echo $PATH
+
+If needed:
+sudo ln -s /usr/local/bin/ansible /usr/bin/ansible
+
+
+### Final verification
+
+Run as a normal user
+
+ansible --version
+
+This should work without needing to specify a full path, satisfying the requirement that all users can run Ansible commands.
