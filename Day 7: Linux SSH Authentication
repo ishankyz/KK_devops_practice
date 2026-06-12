@@ -1,0 +1,17 @@
+generate an SSH key and copy it to each app server's sudo user account.
+
+# 1. Generate a key (if one doesn't already exist)
+ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
+
+# 2. Copy the public key to each app server
+ssh-copy-id <to all the servers required>
+
+# 3. Verify password-less access
+ssh to all the servers
+
+
+If `ssh-copy-id` is not available in the environment, use:
+
+cat ~/.ssh/id_rsa.pub | ssh tony@stapp01 "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
+
+repeat the above for all the servers
