@@ -1,0 +1,19 @@
+install the SELinux packages and configure SELinux to be **disabled after the next reboot
+ssh banner@stapp03
+
+Install the required packages:
+sudo yum install -y selinux-policy selinux-policy-targeted policycoreutils
+
+on newer RHEL-based systems:
+sudo dnf install -y selinux-policy selinux-policy-targeted policycoreutils
+
+Then permanently disable SELinux by editing `/etc/selinux/config`:
+sudo sed -i 's/^SELINUX=.*/SELINUX=disabled/' /etc/selinux/config
+
+Verify:
+cat /etc/selinux/config | gre -i disa
+
+Expected output:
+SELINUX=disabled
+
+Do **not** reboot the server. The current runtime status can remain unchanged. The task only requires that SELinux be configured to come up **disabled after the scheduled reboot**.
