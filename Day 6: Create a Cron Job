@@ -1,0 +1,30 @@
+Run these steps on all the app servers
+
+### 1. Install cronie and start crond
+
+On each server:
+
+
+sudo yum install -y cronie
+sudo systemctl enable --now crond
+
+
+(If the servers use `dnf`, replace `yum` with `dnf`.)
+
+### 2. Add the root cron job
+
+As root:
+sudo crontab -l 2>/dev/null | { cat; echo "*/5 * * * * echo hello > /tmp/cron_text"; } | sudo crontab -
+
+
+### 3. Verify
+Check the cron entry:
+
+sudo crontab -l
+
+Expected output includes:
+
+*/5 * * * * echo hello > /tmp/cron_text
+
+Check the service:
+systemctl status crond
