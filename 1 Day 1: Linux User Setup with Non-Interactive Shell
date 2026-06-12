@@ -1,0 +1,15 @@
+Get the list of users and then login to specific app server
+
+#ssh to server to create user
+ssh banner@stapp03
+then, i/p password
+Password:
+
+#Create the user with a non-interactive shell
+sudo useradd -m -s /sbin/nologin <name>
+(or)
+sudo useradd -m -s /usr/sbin/nologin ravi
+
+#Confirm the user was created
+grep ravi /etc/passwd
+
