@@ -1,0 +1,63 @@
+OPTION1:
+to Secure, go to config and change PermitRootLogin to no
+
+If not mentioned, you should go to all the app servers
+
+#1:SSH into each app server
+
+ssh banner@stapp03
+. -> 2nd server
+. -> 3rd server
+. -> so on
+
+#2: Edit SSH config
+
+Open the SSH daemon config file:
+sudo vi /etc/ssh/sshd_config
+
+#3: Update this setting
+PermitRootLogin yes
+
+Change it to:
+
+PermitRootLogin no
+
+If commented out, uncomment and set it to `no`.
+
+#4: Restart SSH service
+sudo systemctl restart sshd
+
+If fails,
+sudo systemctl restart ssh
+
+#5: Verify setting
+grep PermitRootLogin /etc/ssh/sshd_config
+
+Expected:
+PermitRootLogin no
+
+OPTION2:
+A single command to do this
+You can do it from the **jump host in one go** using a loop.
+
+#Run this from `jump-host`:
+
+for h in stapp01 stapp02 stapp03; do
+  ssh tony@$h "sudo sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config && sudo systemctl restart sshd"
+done
+---
+
+# If different users per server (safer version)
+
+Use this instead:
+ssh tony@stapp01 "sudo sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config && sudo systemctl restart sshd"
+ssh steve@stapp02 "sudo sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config && sudo systemctl restart sshd"
+ssh banner@stapp03 "sudo sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config && sudo systemctl restart sshd"
+
+#Quick verification
+ssh tony@stapp01 "grep PermitRootLogin /etc/ssh/sshd_config"
+
+You should see:
+PermitRootLogin no
+
+If any server complains about `sshd` restart, tell me and I’ll adjust it for that OS version.
