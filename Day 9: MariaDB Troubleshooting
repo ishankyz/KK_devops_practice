@@ -1,0 +1,17 @@
+[peter@stdb01 ~]$ history
+ps 
+ps | grep maria
+ssh systemctl status mariadb            #check if db is running
+sudo systemctl status mariadb
+sudo systemctl status mariadb -l
+sudo systemctl start mariadb            #check for error msg
+sudo systemctl status mariadb.service -l --no-pager     #check error in service
+sudo journalctl -xeu mariadb -l --no-pager | tail -50
+sudo ls -ld /var/lib/mysql/
+sudo ls -l /var/lib/mysql/
+sudo tail -50 /var/log/mariadb/mariadb.log          #check db log to know why it is not starting
+sudo mkdir -p /run/mariadb                        #start troubleshooting cause issue is a permission issue and not starting
+sudo chown mysql:mysql /run/mariadb
+sudo chmod 755 /run/mariadb/
+sudo systemctl start mariadb
+sudo systemctl status mariadb
