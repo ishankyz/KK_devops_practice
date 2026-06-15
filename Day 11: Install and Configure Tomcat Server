@@ -1,0 +1,82 @@
+
+
+# 1. Install Tomcat
+sudo yum install -y tomcat tomcat-webapps tomcat-admin-webapps
+
+---
+
+# 2. Install unzip/zip tools if needed (not strictly used for final fix but part of setup)
+sudo yum install -y zip
+
+---
+
+# 3. Copy ROOT.war from jump host → app server
+(run on jump host)
+scp /tmp/ROOT.war steve@stapp02:/tmp/
+
+---
+
+# 4. Move WAR into Tomcat directory
+(run on stapp02)
+sudo mv /tmp/ROOT.war /var/lib/tomcat/webapps/
+
+---
+
+# 5. Fix ownership (important)
+sudo chown tomcat:tomcat /var/lib/tomcat/webapps/ROOT.war
+
+---
+
+# 6. Configure Tomcat port (HTTP connector)
+sudo vi /etc/tomcat/server.xml
+
+Change:
+xml
+<Connector port="8080"
+
+
+To:
+xml
+<Connector port="3000" protocol="HTTP/1.1"
+           connectionTimeout="20000"
+           redirectPort="8443" />
+
+---
+
+# 7. Fix shutdown port issue (critical fix)
+sudo vi /etc/tomcat/server.xml
+
+Change:
+
+xml
+<Server port="8080" shutdown="SHUTDOWN">
+
+
+To:
+xml
+<Server port="-1" shutdown="SHUTDOWN">
+
+
+---
+
+# 8. Restart Tomcat (multiple times during debugging)
+sudo systemctl restart tomcat
+---
+
+# 9. Check status
+sudo systemctl status tomcat -l
+---
+
+# 10. Check logs when it failed earlier
+sudo journalctl -u tomcat -n 80 --no-pager
+
+---
+
+# 11. Verify port listening (when ss wasn’t available)
+sudo yum install -y net-tools
+netstat -lntp | grep 3000
+
+---
+
+# 12. Final test (from jump host)
+curl http://stapp02:3000
