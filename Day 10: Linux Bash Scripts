@@ -1,0 +1,36 @@
+ls -ltr
+ls -a
+cd /var/www/html/ 
+ls
+cd news/
+ls
+sudo yum install -y zip    #install packages
+sudo mkdir -p /archives
+sudo mkdir -p /scripts
+ls
+ll
+find ~/ -type d -name "archives"     #to find the folder created
+ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa      #key gen so we login without password
+ssh-copy-id tony@stapp01
+sudo vi /scripts/news_archive.sh      #paste below script
+        #!/bin/bash
+      
+        SRC="/var/www/html/news"
+        ARCHIVE="/archives/xfusioncorp_news.zip"
+        REMOTE_USER="natasha"
+        REMOTE_HOST="ststor01"
+        REMOTE_DIR="/archives"
+      
+        # create zip archive
+        zip -r $ARCHIVE $SRC
+      
+        # copy to storage server
+        scp $ARCHIVE ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/
+sudo chmod +x /scripts/news_archive.sh 
+sudo chmod 755 /scripts/news_archive.sh 
+bash /scripts/news_archive.sh 
+ssh-copy-id natasha@ststor01
+cat /scripts/news_archive.sh 
+sudo chmod 755 /scripts/news_archive.sh 
+bash /scripts/news_archi
+ls -l /archives/
